@@ -1,0 +1,9 @@
+Only implement the exact step referenced in the current prompt. Do not add extra features, error handling, validation, or files that were not explicitly requested in that step.
+
+If a step references docs/qr-attendance-system-spec.md or docs/qr-attendance-build-plan.md, read the relevant section before making changes.
+
+Do not modify files outside the scope of the current step without asking first.
+
+Keep changes minimal and scoped. If something in the step is unclear or ambiguous, ask before implementing instead of guessing.
+
+Use the existing folder structure (/src/admin, /src/scanner, /src/lib) — do not create new top-level folders unless explicitly told to.

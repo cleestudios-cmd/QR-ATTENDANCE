@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* Ensure Html5Qrcode video and canvas display properly */
+#scanner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible !important;
+}
+
+/* Target all video elements inside scanner */
+#scanner video,
+#scanner video[playsinline] {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000 !important;
+}
+
+/* Target all canvas elements */
+#scanner canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* Target wrapper divs created by Html5Qrcode */
+#scanner > div,
+#scanner > div > div {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* Ensure nested video elements are visible */
+#scanner > div > video,
+#scanner > div > div > video {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+/* Remove any display none that might be applied */
+#scanner > * {
+  display: block !important;
+}
