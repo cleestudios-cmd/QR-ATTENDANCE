@@ -7,12 +7,20 @@ export default function QrTest() {
   const [qrDataUrl, setQrDataUrl] = useState('')
 
   useEffect(() => {
-    // hardcoded student id for testing
-    supabase.from('students').select('*').eq('full_name', 'Alice Johnson').single().then(({ data, error }) => {
-      if (error) return console.error(error)
-      setStudent(data)
-      QRCode.toDataURL(data.qr_token, { width: 300 }).then(setQrDataUrl)
-    })
+    let mounted = true
+    ;(async () => {
+      try {
+        const { data, error } = await supabase.from('students').select('*').eq('full_name', 'Alice Johnson').single()
+        if (!mounted) return
+        if (error) return console.error(error)
+        setStudent(data)
+        const url = await QRCode.toDataURL(data.qr_token, { width: 300 })
+        if (mounted) setQrDataUrl(url)
+      } catch (e) {
+        console.error(e)
+      }
+    })()
+    return () => { mounted = false }
   }, [])
 
   if (!student) return <div className="p-4 text-center">Loading student...</div>

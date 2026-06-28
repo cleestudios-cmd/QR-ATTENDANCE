@@ -35,7 +35,10 @@ export default function SessionTest() {
       </button>
       {sessionUrl && (
         <div className="mt-4 p-4 bg-gray-100 rounded break-all max-w-lg text-center">
-          <p className="font-mono text-sm">{sessionUrl}</p>
+          <a href={sessionUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-blue-700 underline">{sessionUrl}</a>
+          <div className="mt-2">
+            <a href={sessionUrl} target="_blank" rel="noopener noreferrer" className="inline-block bg-green-600 text-white px-3 py-1 rounded">Open Scanner</a>
+          </div>
         </div>
       )}
     </div>
