@@ -6,6 +6,7 @@ import ClassesOverview from './admin/ClassesOverview'
 import ClassDetail from './admin/ClassDetail'
 import DarkModeToggle from './DarkModeToggle'
 import RequireAdmin from './auth/RequireAdmin'
+import Login from './auth/Login'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             </RequireAdmin>
           }
         />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <DarkModeToggle />
     </BrowserRouter>
