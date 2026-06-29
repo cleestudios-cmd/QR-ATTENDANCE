@@ -27,15 +27,7 @@ export default function Login() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
-    localStorage.removeItem('DEV_FORCE_ADMIN')
     navigate('/')
-  }
-
-  const enableDevAdmin = () => {
-    if (import.meta.env.DEV) {
-      localStorage.setItem('DEV_FORCE_ADMIN', '1')
-      navigate('/admin/classes')
-    }
   }
 
   return (
@@ -66,14 +58,7 @@ export default function Login() {
         {error && <div className="text-red-600">{error}</div>}
       </form>
 
-      {import.meta.env.DEV && (
-        <div className="mt-6">
-          <div className="text-sm text-gray-600 mb-2">Dev tools</div>
-          <button className="px-3 py-2 bg-green-600 text-white rounded" onClick={enableDevAdmin}>
-            Create Dev Admin Session
-          </button>
-        </div>
-      )}
+      {/* Dev tools removed — create a real dev account in Supabase and set `is_admin = true` on the profile */}
     </div>
   )
 }
