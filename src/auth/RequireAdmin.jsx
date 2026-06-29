@@ -13,7 +13,7 @@ export default function RequireAdmin({ children }) {
         const { data: userData } = await supabase.auth.getUser()
         const user = userData?.user
         if (!user) {
-          navigate('/', { replace: true })
+          navigate('/qr-test', { replace: true })
           return
         }
 
@@ -24,13 +24,13 @@ export default function RequireAdmin({ children }) {
           .maybeSingle()
 
         if (error || !profile || !profile.is_admin) {
-          navigate('/', { replace: true })
+          navigate('/qr-test', { replace: true })
           return
         }
 
         if (mounted) setLoading(false)
       } catch (err) {
-        navigate('/', { replace: true })
+        navigate('/qr-test', { replace: true })
       }
     })()
 
