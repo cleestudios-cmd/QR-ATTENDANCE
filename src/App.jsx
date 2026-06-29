@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import QrTest from './admin/QrTest'
 import SessionTest from './admin/SessionTest'
 import SessionLanding from './scanner/SessionLanding'
@@ -9,7 +9,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<div className="p-4 text-center text-lg">QR Attendance</div>} />
+        <Route path="/" element={<Navigate to="/admin/classes" replace />} />
         <Route path="/qr-test" element={<QrTest />} />
         <Route path="/session-test" element={<SessionTest />} />
         <Route path="/scan/:sessionToken" element={<SessionLanding />} />
