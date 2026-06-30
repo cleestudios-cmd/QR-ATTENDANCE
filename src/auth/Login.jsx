@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -22,20 +22,39 @@ export default function Login() {
       setError(signInError.message)
       return
     }
-    navigate('/admin/classes')
+
+    const user = authData?.user
+    if (!user) {
+      setError('Sign-in failed')
+      return
+    }
+
+    // Verify admin flag before navigating to admin area
+    try {
+      const { data: profile, error: profileErr } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .maybeSingle()
+
+      if (profileErr) {
+        setError('Unable to verify admin status')
+        return
+      }
+
+      if (profile && profile.is_admin) {
+        navigate('/admin/classes')
+      } else {
+        setError('Account is not an admin. Contact the project owner to grant admin access.')
+      }
+    } catch (err) {
+      setError('Error checking admin status')
+    }
   }
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
-    localStorage.removeItem('DEV_FORCE_ADMIN')
     navigate('/')
-  }
-
-  const enableDevAdmin = () => {
-    if (import.meta.env.DEV) {
-      localStorage.setItem('DEV_FORCE_ADMIN', '1')
-      navigate('/admin/classes')
-    }
   }
 
   return (
@@ -66,14 +85,7 @@ export default function Login() {
         {error && <div className="text-red-600">{error}</div>}
       </form>
 
-      {import.meta.env.DEV && (
-        <div className="mt-6">
-          <div className="text-sm text-gray-600 mb-2">Dev tools</div>
-          <button className="px-3 py-2 bg-green-600 text-white rounded" onClick={enableDevAdmin}>
-            Create Dev Admin Session
-          </button>
-        </div>
-      )}
+      {/* Dev tools removed — create a real dev account in Supabase and set `is_admin = true` on the profile */}
     </div>
   )
 }

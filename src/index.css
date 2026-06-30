@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 /* Ensure Html5Qrcode video and canvas display properly */
@@ -48,4 +49,53 @@
 /* Remove any display none that might be applied */
 #scanner > * {
   display: block !important;
+}
+
+/* Dark mode variables & overrides */
+:root {
+  --app-bg: #ffffff;
+  --app-text: #111827;
+  --card-bg: #ffffff;
+  --muted-bg: #f8fafc;
+  --border-color: #e5e7eb;
+}
+
+.dark-mode {
+  --app-bg: #000000;
+  --app-text: #ffffff;
+  --card-bg: #0b0b0b;
+  --muted-bg: #070707;
+  --border-color: #222222;
+}
+
+/* apply to overall page */
+html, body, #root {
+  background: var(--app-bg) !important;
+  color: var(--app-text) !important;
+  transition: background-color 280ms ease, color 280ms ease;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+.dark-mode .border { border-color: var(--border-color) !important; }
+
+/* Back button visibility in dark mode */
+.dark-mode .back-button {
+  background-color: #e6e6e6 !important;
+  color: #000000 !important;
+}
+
+/* override common utility backgrounds used in the admin UI */
+.dark-mode .bg-white { background-color: var(--card-bg) !important; }
+.dark-mode .bg-gray-50 { background-color: var(--muted-bg) !important; }
+.dark-mode .text-gray-600 { color: #cbd5e1 !important; }
+.dark-mode .text-gray-500 { color: #94a3b8 !important; }
+.dark-mode .border { border-color: var(--border-color) !important; }
+
+/* Dark mode toggle styling */
+.dark-mode-toggle {
+  backdrop-filter: blur(6px);
+}
+
+/* Fade in/out animation for body-level transitions when toggling */
+.dark-mode, :not(.dark-mode) {
+  transition: background-color 360ms ease, color 360ms ease;
 }

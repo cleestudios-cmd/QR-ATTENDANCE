@@ -10,11 +10,7 @@ export default function RequireAdmin({ children }) {
     let mounted = true
     ;(async () => {
       try {
-        // DEV override for local testing: set localStorage.DEV_FORCE_ADMIN = '1'
-        if (import.meta.env.DEV && localStorage.getItem('DEV_FORCE_ADMIN') === '1') {
-          if (mounted) setLoading(false)
-          return
-        }
+        // No DEV override - require real admin account in Supabase
 
         const { data: userData } = await supabase.auth.getUser()
         const user = userData?.user
@@ -30,13 +26,13 @@ export default function RequireAdmin({ children }) {
           .maybeSingle()
 
         if (error || !profile || !profile.is_admin) {
-          navigate('/qr-test', { replace: true })
+          navigate('/login', { replace: true })
           return
         }
 
         if (mounted) setLoading(false)
       } catch (err) {
-        navigate('/qr-test', { replace: true })
+        navigate('/login', { replace: true })
       }
     })()
 
