@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-    const { error: signInError } = await supabase.auth.signInWithPassword({
+    const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -22,7 +22,34 @@ export default function Login() {
       setError(signInError.message)
       return
     }
-    navigate('/admin/classes')
+
+    const user = authData?.user
+    if (!user) {
+      setError('Sign-in failed')
+      return
+    }
+
+    // Verify admin flag before navigating to admin area
+    try {
+      const { data: profile, error: profileErr } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .maybeSingle()
+
+      if (profileErr) {
+        setError('Unable to verify admin status')
+        return
+      }
+
+      if (profile && profile.is_admin) {
+        navigate('/admin/classes')
+      } else {
+        setError('Account is not an admin. Contact the project owner to grant admin access.')
+      }
+    } catch (err) {
+      setError('Error checking admin status')
+    }
   }
 
   const handleSignOut = async () => {

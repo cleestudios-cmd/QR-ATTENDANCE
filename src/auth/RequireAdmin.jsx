@@ -26,13 +26,13 @@ export default function RequireAdmin({ children }) {
           .maybeSingle()
 
         if (error || !profile || !profile.is_admin) {
-          navigate('/qr-test', { replace: true })
+          navigate('/login', { replace: true })
           return
         }
 
         if (mounted) setLoading(false)
       } catch (err) {
-        navigate('/qr-test', { replace: true })
+        navigate('/login', { replace: true })
       }
     })()
 

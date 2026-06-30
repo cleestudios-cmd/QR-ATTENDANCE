@@ -74,6 +74,32 @@ create policy "admins update delete attendance"
   );
 ```
 
-5) Notes
+5) Policy for `profiles` table (required for login to work):
+
+```sql
+alter table profiles enable row level security;
+
+-- allow users to read their own profile (needed for admin check on login)
+create policy "users can read own profile"
+  on profiles
+  for select
+  using (auth.uid() = id);
+
+-- allow admins to read/update all profiles
+create policy "admins manage profiles"
+  on profiles
+  for all
+  using (
+    exists (
+      select 1 from profiles
+      where profiles.id = auth.uid()
+        and profiles.is_admin = true
+    )
+  );
+```
+
+⚠️ **IMPORTANT**: Without the `"users can read own profile"` SELECT policy above, the login flow in `Login.jsx` will fail silently. When `profiles` has RLS enabled but no SELECT policy allowing the authenticated user to read their own row, the `profiles` query returns `null` instead of the user's profile. This causes the login to redirect to `/qr-test` (the non-admin fallback), even if the user has `is_admin = true` in the database.
+
+6) Notes
 - Policies that call `auth.uid()` require requests authenticated with Supabase JWT (client or service_role). For truly server-only operations, use a server-side function (Vercel Function) that runs with the `service_role` key.
 - Use `maybeSingle()` or checks in your client to avoid leaking admin UI. Client-side guards are UX only — RLS is the security boundary.
